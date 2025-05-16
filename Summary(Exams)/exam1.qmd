@@ -1,0 +1,73 @@
+---
+title: "Exam-1 Kupakwashe Mhere"
+format: html
+---
+
+```{r}
+#install.packages("tidytuesdayR")
+library(tidytuesdayR)
+library(tidyverse)
+library(ggplot2)
+tuesdata <- tt_load('2020-02-18')
+fc <- tuesdata$food_consumption
+```
+
+```{r}
+head(fc)
+dim(fc)
+str(fc)
+```
+
+```{r}
+# Country plot
+ggplot(fc, aes(x = country)) +
+    geom_bar(fill = "red") +
+  labs(
+    title = "Food Consumption Records by Country",
+    x = "Country",
+    y = "Number of Records",
+    caption = "By Kupakwashe"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+```{r}
+# Food item plot
+ggplot(fc, aes(x = food_category)) +
+  geom_bar() +
+  labs(
+    title = "Food Consumption Records by Food Category",
+    x = "Food Category",
+    y = "Number of Records",
+    caption = "By Kupakwashe"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+# Consumption plot (histogram)
+ggplot(fc, aes(x = consumption)) +
+  geom_histogram() +
+    labs(
+    title = "Distribution of Food Consumption",
+    x = "Consumption (kg per capita per year)",
+    y = "Frequency",
+    caption = "By Kupakwashe"
+  ) +
+  theme_minimal()
+```
+
+Overall food consumption / food category -  bar graph
+Overall food consumption / country - bar graph
+
+I have a few more questions:
+
+How does the region of the world impact consumption patterns?
+What effect does a country's size have on its consumption?
+
+
+
+
+

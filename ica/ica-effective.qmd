@@ -1,0 +1,36 @@
+---
+title: "Effective Viz"
+---
+
+Use this file for practice with the **spatial viz** in-class activity.  Refer to the class website for details.
+```{r}
+# Load tidyverse package for plotting and wrangling
+library(tidyverse)
+
+# Import the data
+weather <- read.csv("https://mac-stat.github.io/data/weather_3_locations.csv") |> 
+  mutate(date = as.Date(date))
+
+
+```
+```{r}
+ggplot(weather, aes(y = temp3pm, x = temp9am, color = location)) + 
+  geom_point()
+
+```
+```{r}
+#making it better
+ggplot(weather, aes(y = temp3pm, x = temp9am, color = location)) + 
+  geom_point() + 
+  labs(x = "9am Temperature", y = "3pm Temperature", title = "Weather in 3 Australian Locations", color = "orange")  
+```
+```{r}
+# adding caption
+#| fig-cap: "Scatter plot showing the relationship between 9am Temperature and 3pm Temperature across different Australian locations. The x-axis represents the 9am Temperature, while the y-axis represents the 3pm Temperature. Each point is colored according to the respective location" 
+
+ggplot(weather, aes(y = temp3pm, x = temp9am, color = location)) + 
+  geom_point() + 
+  labs(x = "9am Temperature", y = "3pm Temperature", title = "Weather in 3 Australian Locations", color = "orange")  + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+

@@ -3,3 +3,31 @@ title: "Trivariate Viz"
 ---
 
 Use this file to generate a professional looking **trivariate** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+
+# Effective Visualization Checklist
+
+- **Effective?** right for data, clear purpose, unbiased, not misleading
+- **Complete?** title, subtitle, axis & legend labels, caption, data annotation
+- **Accessible?** color-blind safe palette, alt text, readable text size
+
+# 3. Trivariate Visualization
+
+**Research Question:** Does the displacement–MPG relationship differ by drive type?
+
+```{r, fig.cap="Displacement vs MPG Colored by Drive Type", fig.alt="Scatterplot of displacement vs highway mpg colored by drive type.", warning=FALSE}
+library(ggplot2)
+ggplot(mpg, aes(x = displ, y = hwy, color = drv)) +
+  geom_point(alpha = 0.7) +
+  scale_color_brewer(palette = "Set1", name = "Drive Type") +
+  labs(
+    title    = "Displacement vs MPG by Drive Type",
+    subtitle = "Drive types: front (f), rear (r), 4wd (4)",
+    x        = "Displacement (L)",
+    y        = "Highway MPG",
+    caption  = "Source: ggplot2::mpg"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(legend.position = "bottom")
+```
+
+*Summary:* Front‑wheel drive cars (f) dominate the high‑MPG, low‑displacement region, averaging around 30–40 MPG. Rear‑drive (r) vehicles are more spread but generally less efficient. Four‑wheel drive (4) cluster by larger displacements and lower MPG (15–25). This confirms drivetrain influences both design and fuel economy.

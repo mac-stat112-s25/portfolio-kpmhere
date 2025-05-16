@@ -1,0 +1,57 @@
+---
+title: "Strings Viz"
+---
+```{r}
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+courses <- read.csv("https://mac-stat.github.io/data/registrar.csv")
+
+# Exercise 1: Time slots
+time_slots <- courses %>%
+  count(days, time, name = "classes_offered") %>%
+  arrange(desc(classes_offered)) %>%
+  slice_head(n = 6)
+time_slots
+
+# Exercise 2: Prep the data
+courses_clean <- courses %>%
+  separate(avail_max, into = c("avail", "max"), sep = " / ") %>%
+  mutate(avail = as.numeric(avail),
+         max   = as.numeric(max),
+         enroll = max - avail) %>%
+  separate(number, into = c("dept", "number", "section"), sep = "[ -]")
+
+# Exercise 3: Courses by department
+top_departments <- courses_clean %>%
+  count(dept, name = "sections_offered") %>%
+  arrange(desc(sections_offered)) %>%
+  slice_head(n = 6)
+long_titles <- courses_clean %>%
+  group_by(dept) %>%
+  summarise(avg_title_length = mean(nchar(name)), .groups = "drop") %>%
+  arrange(desc(avg_title_length)) %>%
+  slice_head(n = 6)
+
+# Exercise 4a: Courses taught by Alicia Johnson
+alicia_courses <- courses_clean %>%
+  filter(instructor == "Alicia Johnson")
+
+# Exercise 4b: STAT courses dataset
+stat <- courses_clean %>%
+  filter(dept == "STAT") %>%
+  mutate(name = str_remove(name, "^Introduction to "),
+         name = str_replace(name, "Statistical", "Stat"),
+         start_numeric = str_extract(time, "^\\d{1,2}:\\d{2}"),
+         suffix = str_extract(time, "(?i)(am|pm)$"),
+         start_time = paste(start_numeric, suffix)) %>%
+  select(number, name, start_time, enroll)
+
+# Exercise 5: More cleaning
+enrollments <- courses_clean %>%
+  filter(!(dept %in% c("PE", "INTD")),
+         !(dept == "MUSI" & as.numeric(number) < 100),
+         !(dept == "THDA" & as.numeric(number) < 100),
+         !str_detect(name, "\\bLab\\b"))
+```

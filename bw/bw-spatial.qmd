@@ -3,3 +3,44 @@ title: "Spatial Viz"
 ---
 
 Use this file to generate a professional looking **spatial** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+
+# Effective Visualization Checklist
+
+- **Effective?** right for data, clear purpose, unbiased, not misleading
+- **Complete?** title, subtitle, axis & legend labels, caption, data annotation
+- **Accessible?** color-blind safe palette, alt text, readable text size
+
+---
+
+
+
+# 5. Spatial Visualization
+
+**Research Question:** Which U.S. states had the highest murder arrest rates in 1973?
+
+```{r, fig.cap="U.S. Murder Arrest Rates by State (1973)", fig.alt="Choropleth map of the United States filled by murder arrest rate.", warning=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(maps)
+library(viridis)
+
+states_map <- map_data("state")
+arrests <- USArrests %>%
+  rownames_to_column("region") %>%
+  mutate(region = tolower(region))
+
+map_df <- left_join(states_map, arrests, by = "region")
+
+ggplot(map_df, aes(x = long, y = lat, group = group, fill = Murder)) +
+  geom_polygon(color = "white") +
+  scale_fill_viridis_c(name = "Murder Rate") +
+  coord_fixed(1.3) +
+  labs(
+    title    = "Murder Arrest Rates by State (1973)",
+    subtitle = "USArrests dataset",
+    caption  = "Source: datasets::USArrests"
+  ) +
+  theme_void(base_size = 14)
+```
+
+*Summary:* The highest arrest rates are clustered in the Deep South (e.g., Louisiana, Mississippi, Alabama), reflecting regional social dynamics of the era. Northern and Western states mostly register lower rates (3–5 per 100k), revealing clear geographic patterns in violent crime across the country.

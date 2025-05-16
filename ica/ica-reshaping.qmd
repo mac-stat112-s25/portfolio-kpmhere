@@ -1,0 +1,44 @@
+---
+title: "Reshaping Viz"
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+sleep_wide <- read.csv("https://mac-stat.github.io/data/sleep_wide.csv")
+
+head(sleep_wide)
+```
+```{r}
+"units of observation here are subjects"
+```
+
+```{r}
+"first few rows have to have subject, day and reaction time"
+```
+
+```{r}
+sleep_wide |>
+  pivot_longer(cols =c(day_0, day_1, day_2, day_3, day_4, day_5, day_6, day_7, day_8, day_9),
+              names_to = "day",
+              values_to = "reaction_time")
+```
+```{r}
+sleep_wide |>
+  pivot_longer(cols = c(day_0, day_1, day_2, day_3, day_4, day_5, day_6, day_7, day_8, day_9),
+               names_to = "day",
+               values_to = "reactiontime",
+               names_prefix = "day_")
+```
+
+```{r}
+
+```
+
+
+
+
+

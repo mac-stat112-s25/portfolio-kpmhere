@@ -1,0 +1,68 @@
+---
+title: "Solo Project"
+---
+
+# 5. Solo Project
+
+## Introduction
+
+Ice hockey is Canada’s national winter sport, but not every province fields the same number of NHL franchises.  
+In this short project, I will map Canadian provinces by how many NHL teams they host and reflect on regional concentrations of top‑tier hockey markets.
+
+```{r}
+# Here I load required packages
+library(sf)
+library(dplyr)
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+
+```{r}
+# 1. Here I get Canada's provinces as an sf object
+canada <- ne_states(country = "Canada", returnclass = "sf")
+
+# 2. Here I compile number of NHL teams per province
+nhl_counts <- tibble::tibble(
+  name_en   = c("British Columbia", "Alberta", "Ontario", "Quebec", "Manitoba"),
+  nhl_teams = c(1,                 2,         2,         1,        1)
+)
+
+# 3. Here I Left‑join and replace NA with 0 for provinces without NHL teams
+canada_teams <- canada %>%
+  left_join(nhl_counts, by = "name_en") %>%
+  mutate(nhl_teams = tidyr::replace_na(nhl_teams, 0))
+
+```
+
+```{r}
+# 4. Now onto building my choropleth map: 
+ggplot(canada_teams) +
+  geom_sf(aes(fill = nhl_teams), color = "white", size = 0.2) +
+  scale_fill_viridis_c(
+    option = "plasma", direction = -1,
+    breaks = 0:2
+  ) +
+  labs(
+    title    = "NHL Franchises by Canadian Province",
+    subtitle = "Count of teams in each province (2025)",
+    fill     = "NHL Teams",
+    caption  = "Data: NHL official site; geography: Natural Earth"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    panel.grid.major = element_line(color = "gray80"),
+    plot.title       = element_text(face = "bold", size = 20),
+    plot.subtitle    = element_text(size = 16)
+  )
+
+```
+Summary : British Columbia, Alberta, Ontario, Quebec, and Manitoba are the only five provinces to host NHL franchises.
+The two biggest population centres, Toronto (Ontario) and Montreal (Quebec) each have a team, while Alberta’s two, Calgary and Edmonton, reflect the province’s strong hockey culture despite a smaller population.
+Manitoba’s Winnipeg Jets carry a storied history of community revival, and British Columbia’s solitary team in Vancouver highlights the Pacific coast’s passion for the sport.
+All other provinces (and territories) lack NHL presence, underscoring how market size and historical investment shape the geography of Canada’s top‑tier hockey.
+
+
+
+

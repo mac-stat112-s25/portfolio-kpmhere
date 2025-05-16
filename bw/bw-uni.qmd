@@ -3,3 +3,38 @@ title: "Univariate Viz"
 ---
 
 Use this file to generate a professional looking **univariate** visualization. The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+
+# Effective Visualization Checklist
+
+- **Effective?** right for data, clear purpose, unbiased, not misleading
+- **Complete?** title, subtitle, axis & legend labels, caption, data annotation
+- **Accessible?** color-blind safe palette, alt text, readable text size
+
+---
+
+# 1. Univariate Visualization
+
+**Research Question:** What is the distribution of life expectancy across countries in 2007?
+
+```{r, fig.cap="Distribution of Life Expectancy among Countries in 2007", fig.alt="Histogram showing life expectancy distribution with a peak around 70-75 years.", warning=FALSE}
+library(tidyverse)
+library(gapminder)
+library(viridis)
+
+life2007 <- gapminder %>% filter(year == 2007)
+
+ggplot(life2007, aes(x = lifeExp)) +
+  geom_histogram(bins = 30, fill = viridis(1), color = "white") +
+  labs(
+    title    = "Life Expectancy Distribution (2007)",
+    subtitle = "Gapminder data: Each bar = Number of countries",
+    x        = "Life Expectancy (years)",
+    y        = "Number of Countries",
+    caption  = "Source: gapminder package"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+*Summary:* In 2007, life expectancy across countries shows a roughly bell-shaped distribution centered around 70–75 years. A small left tail contains nations with lower health outcomes (around 45–60 years), while a right tail extends toward very high values (above 80 years), reflecting developed nations with excellent healthcare. The median is slightly higher than the mean, indicating a mild left skew driven by a handful of low‑life‑expectancy countries.
+
+---

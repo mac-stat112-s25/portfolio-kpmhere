@@ -1,0 +1,44 @@
+---
+title: "Joining Viz"
+---
+
+```{r}
+library(dplyr)
+
+# Data setup
+students_2 <- data.frame(
+  student = c("D", "E", "F"),
+  class   = c("COMP 101", "BIOL 101", "POLI 101")
+)
+enrollments_2 <- data.frame(
+  course     = c("ART 101", "BIOL 101", "COMP 101"),
+  enrollment = c(18, 20, 19)
+)
+
+# Part a: join on class == course
+students_2 |> 
+  left_join(enrollments_2, by = c("class" = "course"))
+
+# Part b (explicitly using join_by, same result)
+students_2 |> 
+  left_join(enrollments_2, join_by(class == course))
+
+# Part c: setup students_3 / enrollments_3
+students_3 <- data.frame(
+  student = c("Y", "Y", "Z", "Z"),
+  class   = c("COMP 101", "BIOL 101", "POLI 101", "COMP 101"),
+  grade   = c("B", "S", "C", "A")
+)
+enrollments_3 <- data.frame(
+  class      = c("ART 101", "BIOL 101","COMP 101"),
+  grade      = c("B", "A", "A-"),
+  enrollment = c(20, 18, 19)
+)
+
+# Part c: (incorrect join; no common by — will error)
+# students_3 |> left_join(enrollments_3)
+
+# Part d: correct join on class
+students_3 |> 
+  left_join(enrollments_3, by = "class")
+```

@@ -1,0 +1,19 @@
+---
+title: "Importing Data"
+---
+
+```{r}
+library(tidyverse)
+imdb_messy <- read_csv("~/Documents/GitHub/portfolio-kpmhere/data/imdb_5000_messy.csv")
+```
+
+```{r}
+getwd()
+```
+
+```{r}
+imdb_temp <- read_csv("../data/imdb_5000_messy.csv")
+```
+
+
+

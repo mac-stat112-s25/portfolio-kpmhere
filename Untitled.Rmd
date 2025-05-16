@@ -1,0 +1,75 @@
+---
+title: "CARGURUS"
+author: "Kupakwashe Mhere"
+date: "2025-02-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+library(maps)
+library(sf)
+library(dplyr)
+
+# Load US states map data
+us_states <- map_data("state")  # Get state boundaries
+
+# Create a dataset with state earnings (Replace with real data)
+set.seed(42)
+cargurus_earnings <- data.frame(
+  state = tolower(state.name),  # Convert state names to lowercase for merging
+  abb = state.abb,  # State abbreviations
+  earnings = runif(50, 500000, 5000000)  # Generate random earnings ($500K - $5M)
+)
+
+# Merge earnings data with map data
+us_map <- us_states %>%
+  left_join(cargurus_earnings, by = c("region" = "state"))
+
+# Compute state centers for label placement
+state_centers <- data.frame(state.center, abb = state.abb)
+
+# Plot the map
+ggplot(us_map) +
+  geom_polygon(aes(x = long, y = lat, group = group, fill = earnings), color = "white") +
+  geom_text(data = state_centers, aes(x = x, y = y, label = abb), size = 3, color = "black") +  # Add state initials
+  scale_fill_gradient(low = "lightgreen", high = "darkgreen", name = "Earnings ($M)", 
+                      breaks = seq(500000, 5000000, by = 1000000),  # Set clearer breaks
+                      labels = scales::comma_format(scale = 1e-6, suffix = "M")) +  # Convert to millions
+  theme_void() +  # Remove axes and background
+  theme(
+    legend.position = "bottom",
+    legend.key.width = unit(1.5, "cm"),  # Make legend keys wider
+    legend.key.height = unit(0.6, "cm"), # Increase legend key spacing
+    legend.text = element_text(size = 10)  # Increase legend text size
+  ) +
+  ggtitle("CarGurus Earnings by State")
+
+```
+
+

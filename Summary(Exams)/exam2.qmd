@@ -1,0 +1,72 @@
+---
+title: "Exam-2 Kupakwashe Mhere"
+format: html
+---
+```{r}
+library(tidytuesdayR)
+library(tidyverse)
+library(rnaturalearth)
+library(sf)
+```
+
+```{r}
+tuesdata <- tt_load('2020-02-18')
+fc <- tuesdata$food_consumption
+```
+
+```{r}
+str(fc)
+head(fc)
+```
+
+```{r}
+fcc <- fc %>%
+  mutate(
+    food_category = ifelse(food_category == "Lamb & Goat", "Lamb", food_category),
+    food_category = ifelse(food_category == "Milk - inc. cheese", "Dairy", food_category),
+    food_category = ifelse(food_category == "Wheat and Wheat Products", "Wheat", food_category),
+    food_category = ifelse(food_category == "Nuts inc. Peanut Butter", "Nuts", food_category),
+    ) %>%
+  arrange(desc(consumption))
+```
+
+```{r}
+#| fig-alt: "A series of world maps showing standardized food consumption across countries, faceted by food category. Darker shades indicate higher-than-average consumption; lighter shades indicate lower-than-average consumption."
+#| fig-cap: "Source: tidytuesdayR (2020-02-18)"
+
+ne_countries(return = "sf") |>
+  select(name, geometry) %>%
+  mutate(name = ifelse(name == "United States of America", "USA", name)) |>
+  mutate(name = ifelse(name == "Bosnia and Herz", "Bosnia and Herzegovina", name)) |>
+  mutate(name = ifelse(name == "Czechia", "Czech Republic", name)) |>
+  mutate(name = ifelse(name == "Taiwan", "Taiwan. ROC", name)) |>
+  left_join(
+    fcc |>
+      select (-co2_emmission) |>
+      group_by(food_category) |>
+      mutate(consumption = (consumption - mean(consumption))/sd(consumption)),
+    join_by(name == country)) |>
+  pivot_wider(names_from = food_category, values_from = consumption)|>
+  select(-"NA") |>
+  pivot_longer(cols = c(-name, -geometry),
+               names_to = "food_category",
+               values_to = "consumption") |>
+  ggplot() +
+  geom_sf(aes(fill = consumption)) +
+  facet_wrap(~food_category) +
+  scale_fill_viridis_c(option = "C", name = "Standardized\nConsumption (Z-score)",
+                       guide = guide_colorbar(barwidth = 10, barheight = 0.5)) +
+  labs(
+    title = "Standardized Food Consumption Patterns by Country and Food Category",
+    caption = "Visualization by Kupakwashe"
+  ) +
+  annotate("text", x = -170, y = -55, label = "By Kupakwashe", hjust = 0, vjust = 1, size = 3, alpha = 0.5) +
+  theme_minimal() +
+  theme(
+    legend.position = "bottom",
+    plot.title = element_text(face = "bold", size = 14),
+    plot.caption = element_text(size = 8, hjust = 0),
+    strip.text = element_text(face = "bold")
+  )
+```
+

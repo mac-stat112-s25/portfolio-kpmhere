@@ -1,0 +1,63 @@
+---
+title: "Dates Viz"
+---
+
+```{r}
+library(mosaic)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+data("Birthdays")
+
+# Exercise 5: Warming up
+days_per_state <- Birthdays %>% group_by(state) %>% summarise(days = n())
+total_births <- Birthdays %>% summarise(total = sum(births))
+births_per_state <- Birthdays %>% group_by(state) %>% summarise(total = sum(births)) %>% arrange(total)
+
+# Exercise 6: Daily births dataset and plot
+daily_births <- Birthdays %>% group_by(date, wday) %>% summarise(total_births = sum(births))
+ggplot(daily_births, aes(x = date, y = total_births, color = wday)) +
+  geom_line()
+
+# Exercise 7a: Monthly births and plot
+monthly_births <- Birthdays %>%
+  group_by(year, month) %>%
+  summarise(total_births = sum(births)) %>%
+  mutate(month = factor(month.abb[month], levels = month.abb),
+         year_month = as.Date(paste(year, month, "1"), "%Y %b %d"))
+ggplot(monthly_births, aes(x = year_month, y = total_births)) +
+  geom_line()
+
+# Exercise 7b: Weekly births per state in 1988 (weeks 1–52) and plot
+weekly_births_state1988 <- Birthdays %>%
+  filter(year == 1988) %>%
+  mutate(week = week(date)) %>%
+  filter(week != 53) %>%
+  group_by(state, week) %>%
+  summarise(total_births = sum(births))
+ggplot(weekly_births_state1988, aes(x = week, y = total_births, color = state, group = state)) +
+  geom_line()
+
+# Exercise 7c: Weekly births for MN and LA in 1988 and plot
+weekly_MN_LA1988 <- Birthdays %>%
+  filter(year == 1988, state %in% c("MN", "LA")) %>%
+  mutate(week = week(date)) %>%
+  filter(week != 53) %>%
+  group_by(state, week) %>%
+  summarise(total_births = sum(births))
+ggplot(weekly_MN_LA1988, aes(x = week, y = total_births, color = state, group = state)) +
+  geom_line()
+
+# Exercise 8a: Massachusetts births in 1979 sorted
+ma_1979 <- Birthdays %>%
+  filter(state == "MA", year == 1979) %>%
+  arrange(desc(births))
+
+# Exercise 8b: Top 5 states by births from 1979-09-09 to 1979-09-12
+top5_states_sep79 <- Birthdays %>%
+  filter(date >= as.Date("1979-09-09") & date <= as.Date("1979-09-12")) %>%
+  group_by(state) %>%
+  summarise(total_births = sum(births)) %>%
+  arrange(desc(total_births)) %>%
+  slice_head(n = 5)
+```

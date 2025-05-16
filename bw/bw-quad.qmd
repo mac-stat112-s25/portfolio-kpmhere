@@ -3,3 +3,38 @@ title: "Quadvariate Viz"
 ---
 
 Use this file to generate a professional looking **quadvariate** visualization.  The visualization will not perfect the first time but you are expected to improve on it throughout the semester especially after covering advanced topics such as effective viz.
+
+# Effective Visualization Checklist
+
+- **Effective?** right for data, clear purpose, unbiased, not misleading
+- **Complete?** title, subtitle, axis & legend labels, caption, data annotation
+- **Accessible?** color-blind safe palette, alt text, readable text size
+
+
+# 4. Quadrivariate Visualization
+
+**Research Question:** How do displacement, manufacturer, drive type, and cylinder count interact to influence highway MPG?
+
+```{r, fig.cap="Multi-Dimensional Car Performance", fig.alt="Scatterplot of displacement vs highway mpg, sized by cylinders, colored by manufacturer, faceted by drive type.", warning=FALSE}
+library(ggplot2)
+ggplot(mpg, aes(x = displ, y = hwy, color = manufacturer, size = cyl)) +
+  geom_point(alpha = 0.6) +
+  facet_wrap(~drv) +
+  scale_color_viridis_d(option = "turbo", name = "Manufacturer") +
+  labs(
+    title    = "Engine Size, Manufacturer, Cylinders, and MPG",
+    subtitle = "Faceted by drive type; point size = cylinder count",
+    x        = "Displacement (L)",
+    y        = "Highway MPG",
+    caption  = "Source: ggplot2::mpg"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    strip.text     = element_text(size = 12)
+  )
+```
+
+*Summary:* Within each drivetrain facet, manufacturers cluster distinctly—e.g., Toyota and Honda produce more low‑displacement/high‑MPG models, while American brands often show larger displacements. Vehicles with 4 or 6 cylinders occupy the mid‑range, whereas 8‑cylinder models (larger points) appear only at low MPG. This view highlights how brand, cylinder count, and drivetrain jointly shape efficiency.
+
+---

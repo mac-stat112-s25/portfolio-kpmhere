@@ -1,0 +1,21 @@
+---
+title: "Capstone Talks"
+---
+
+Presenter Name: Jacob Hellenbrand
+Talk Title: Evolving Intelligence: Simulating Life with Genetic Algorithms
+
+Main Message:
+Jacob's presentation delved into the use of AI agents to simulate life, exploring whether these AI entities can be considered alive, their potential for evolution, and the ethical implications of such developments. He demonstrated how AI agents evolve through neural networks, based on their ability to survive and reproduce by consuming food and maintaining fitness. By incorporating genetic algorithms, he explained how agents undergo mutation and gene crossover to adapt over time, highlighting how certain traits, like speed, become dominant in the simulated environment. The results indicated that initial poor neural networks led to agents failing to reproduce, while beneficial mutations, particularly those related to speed, enabled agents to thrive. The focus was on how mutation drives evolution, though there was a lack of genetic diversity as speed genes became predominant.
+
+Suggestion for Improvement for Jacob:
+One potential improvement could be to explore and explain the limitations of the simulation in greater detail. For instance, addressing how randomness and initial conditions (such as starting neural networks) influence the outcomes would provide more insight into the reliability of the results. Additionally, discussing potential ways to enhance agent behavior or increase the diversity of outcomes (e.g., by adjusting mutation rates or introducing new variables) could encourage further exploration of the simulation's complexity.
+
+Presenter Name: Long Truong
+Talk Title: Time to Launch: Predicting Astronaut Mission Time with Bayes
+
+Main Message:
+Long's presentation examined the evolution of space missions by analyzing changes in mission frequency and duration over time, particularly from the Cold War era to 2018. The dataset included astronaut details (age, gender, nationality), spacecraft information, mission durations, and EVAs, which were analyzed to identify trends in astronaut missions. He presented Bayesian hierarchical models to predict mission durations, with the first model (using one predictor, spacecraft in orbit) outperforming the second model that used multiple predictors (such as occupation, number of missions, and selection year). The discussion highlighted the challenges of using more complex models, with the second model underperforming, likely due to overfitting or the inclusion of too many predictors.
+
+Suggestion for Improvement:
+To enhance clarity, it would be beneficial to guide the audience through the reasoning behind selecting specific predictors in the second model and how each might contribute to predictive accuracy. Providing more explanation on the Bayesian hierarchical modeling approach would also help those unfamiliar with advanced statistical methods understand the model's significance.
